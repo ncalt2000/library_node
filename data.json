@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Harry Potter",
+    "author": "J.K. Rowling",
+    "pubDate": "2004",
+    "rating" : "5",
+    "pages" : "1000"
+  },
+  {
+    "title": "Harry Potter - 2",
+    "author": "J.K. Rowling",
+    "pubDate": "2005",
+    "rating" : "4",
+    "pages" : "800"
+  },
+  {
+    "title": "It",
+    "author": "S. King",
+    "pubDate": "1983",
+    "rating" : "5",
+    "pages" : "400"
+  }
+]
