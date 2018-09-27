@@ -8,7 +8,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // CREATES A NEW BOOK IN LIBRARY
 router.post('/', function(req, res) {
-  console.log(req.body, 'req.body-POST');
+  // console.log(req.body, 'req.body-POST');
   const bookPromises = req.body.bookshelf.map(item => {
     return Library.create({
       title: item.title,
@@ -17,7 +17,6 @@ router.post('/', function(req, res) {
       pubDate: new Date(item.publishDate) || "no date",
       genre: item.genre,
       rating: item.rating,
-      numPages: item.numPages,
       cover: item.cover || "no cover",
       synopsis: item.synopsis,
     })
@@ -25,11 +24,11 @@ router.post('/', function(req, res) {
   // because we iterate, it creates multiple promises which throws error: Headers already set!
   // get all promises and pass it in Promise.all()
   Promise.all(bookPromises).then((value) => {
-    console.log(value, "VALUE");
+    // console.log(value, "VALUE");
     return res.status(200).send(value);
   })
   .catch(err => {
-    console.log(err, "Error!");
+    // console.log(err, "Error!");
     res.status(500).send("There was a problem adding book(s) to the database.")
   })
 });
@@ -47,8 +46,8 @@ router.get('/', function(req, res) {
 router.delete('/:id', function(req, res) {
   console.log(req.params.id, 'params');
   Library.findByIdAndRemove(req.params.id, (err, response) => {
-    console.log(res, 'res');
-    console.log(err, 'error');
+    // console.log(res.body, 'res');
+    // console.log(err, 'error');
     if (err) {
       return res.status(500).send(err)
     }
@@ -56,16 +55,17 @@ router.delete('/:id', function(req, res) {
   })
 });
 
-// router.delete('/:id', function(req, res) {
-//   // console.log(req.params.id, 'params');
-//   Library.findByIdAndRemove(req.params.id, (err, response) => {
-//     console.log(res, 'res');
-//     console.log(err, 'error');
-//     if (err) {
-//       return res.status(500).send(err)
-//     }
-//     res.status(200).send(response)
-//   })
-// });
+router.put('/:id', function(req, res) {
+  // console.log(req.body, "REQ.BODY");
+  // console.log(req.params.id, "REQ.params");
+  Library.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, response) => {
+    // console.log(response, 'RESPONSE');
+    // console.log(err, 'error');
+    if (err) {
+      return res.status(500).send(err)
+    }
+    res.status(200).send(response)
+  })
+});
 
 module.exports = router;
