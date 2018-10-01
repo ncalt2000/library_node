@@ -3,12 +3,13 @@ var bodyParser = require('body-parser');
 var Library = require('../models/library.js');
 
 var router = express.Router();
-
+router.use(bodyParser({limit: '50mb'}));
 router.use(bodyParser.urlencoded({extended: true}));
 
 // CREATES A NEW BOOK IN LIBRARY
 router.post('/', function(req, res) {
-  // console.log(req.body, 'req.body-POST');
+  console.log(req.body, 'req.body-POST');
+
   const bookPromises = req.body.bookshelf.map(item => {
     return Library.create({
       title: item.title,
@@ -44,7 +45,7 @@ router.get('/', function(req, res) {
 });
 
 router.delete('/:id', function(req, res) {
-  console.log(req.params.id, 'params');
+  // console.log(req.params.id, 'params');
   Library.findByIdAndRemove(req.params.id, (err, response) => {
     // console.log(res.body, 'res');
     // console.log(err, 'error');
@@ -60,7 +61,6 @@ router.put('/:id', function(req, res) {
   // console.log(req.params.id, "REQ.params");
   Library.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, response) => {
     // console.log(response, 'RESPONSE');
-    // console.log(err, 'error');
     if (err) {
       return res.status(500).send(err)
     }
