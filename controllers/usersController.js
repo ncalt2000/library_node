@@ -67,7 +67,9 @@ router.get('/me', function(req, res) {
 //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCIU..."
 // }
 router.post('/login', function(req, res) {
+  console.log(req.body, 'Body from LOGIN');
   Users.findOne({ email: req.body.email }, function (err, user) {
+    console.log(user, 'USER');
     if (err) return res.status(500).send('Error on the server.');
     if (!user) return res.status(404).send('No user found.');
 
