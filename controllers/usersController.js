@@ -1,95 +1,94 @@
 var express = require('express');
 var app = express();
+var jwt = require('jsonwebtoken');
+var bcryptjs = require('bcrypt');
 var bodyParser = require('body-parser');
 var Users = require('../models/users.js');
 var router = express.Router();
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var auth = require('../config/auth.js');
-
+var authSecret = require('../config/auth.js');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
-//POST new user route (optional, everyone has access)
-router.post('/', auth.optional, (req, res, next) => {
-  const { body: { user } } = req;
-  console.log(user, "USER");
+//Register/Create new user
+//req.body: {
+//     "firstName" : "Ian",
+//     "lastName": "Strouse",
+//     "email": "ian.strouse@gmail.com",
+//     "password" : "blah"
+// }
+router.post('/register', function(req, res) {
+  console.log(req.body, "BODY");
+  var hashedPassword = bcryptjs.hashSync(req.body.password, 8);
+  Users.create({
+    firstName : req.body.firstName,
+    lastName : req.body.lastName,
+    email : req.body.email,
+    password : hashedPassword
+  },
+  function (err, user) {
+    console.log(user, 'USER');
+    if (err) return res.status(500).send("There was a problem registering the user.")
 
-  if(!user.email) {
-    return res.status(422).json({
-      errors: {
-        email: 'is required',
-      },
+    // create a token
+    var token = jwt.sign({ id: user._id }, authSecret.secret, {
+      expiresIn: 86400 // expires in 24 hours
     });
-  }
 
-  if(!user.password) {
-    return res.status(422).json({
-      errors: {
-        password: 'is required',
-      },
-    });
-  }
-
-  const finalUser = new Users(user);
-
-  finalUser.setPassword(user.password);
-
-  return finalUser.save()
-    .then(() => res.json({ user: finalUser.toAuthJSON() }));
+    res.status(200).send({ auth: true, token: token});
+  });
 });
 
-//POST login route (optional, everyone has access)
-router.post('/login', auth.optional, (req, res, next) => {
-  const { body: { user } } = req;
+//Check User Access Token //NEEDS CLARIFICATION!!!
+router.get('/me', function(req, res) {
+  console.log(req.body, 'REQ');
+  console.log(res.body, "RES");
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
-  if(!user.email) {
-    return res.status(422).json({
-      errors: {
-        email: 'is required',
-      },
+  jwt.verify(token, authSecret.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+
+    User.findById(decoded.id,
+      { password: 0 }, // projection
+      function (err, user) {
+        if (err) return res.status(500).send("There was a problem finding the user.");
+        if (!user) return res.status(404).send("No user found.");
+
+        res.status(200).send(user);
     });
-  }
-
-  if(!user.password) {
-    return res.status(422).json({
-      errors: {
-        password: 'is required',
-      },
-    });
-  }
-
-  return passport.authenticate('local', { session: false }, (err, passportUser, info) => {
-    if(err) {
-      return next(err);
-    }
-
-    console.log(passportUser, "USER PASSPORT");
-    console.log(info, "INfo");
-    if(passportUser) {
-      const user = passportUser;
-      user.token = passportUser.generateJWT();
-
-      return res.json({ user: user.toAuthJSON() });
-    }
-
-    return res.status(400).info;
-  })(req, res, next);
+  });
 });
 
-//GET current route (required, only authenticated users have access)
-router.get('/current', auth.required, (req, res, next) => {
-  const { payload: { id } } = req;
+//LOGIN
+//req.body = { email: 'natalia_calt@yahoo.com', password: 'password' }
+//if OK, res.send {
+//     "auth": true,
+//     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCIU..."
+// }
+router.post('/login', function(req, res) {
+  Users.findOne({ email: req.body.email }, function (err, user) {
+    if (err) return res.status(500).send('Error on the server.');
+    if (!user) return res.status(404).send('No user found.');
 
-  return Users.findById(id)
-    .then((user) => {
-      if(!user) {
-        return res.sendStatus(400);
-      }
+    var passwordIsValid = bcryptjs.compareSync(req.body.password, user.password);
+    if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
 
-      return res.json({ user: user.toAuthJSON() });
+    var token = jwt.sign({ id: user._id }, authSecret.secret, {
+      expiresIn: 86400 // expires in 24 hours
     });
+
+    res.status(200).send({ auth: true, token: token });
+  });
+});
+
+//LOGOUT
+//if OK, res.send {
+//     "auth": false,
+//     "token": null
+// }
+router.get('/logout', function(req, res) {
+  res.status(200).send({ auth: false, token: null });
 });
 
 
