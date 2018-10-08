@@ -85,10 +85,6 @@ router.post('/login', function(req, res) {
 });
 
 //LOGOUT
-//if OK, res.send {
-//     "auth": false,
-//     "token": null
-// }
 router.get('/logout', function(req, res) {
   res.status(200).send({ auth: false, token: null });
 });

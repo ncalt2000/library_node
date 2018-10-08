@@ -8,9 +8,11 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // CREATES A NEW BOOK IN LIBRARY
 router.post('/', function(req, res) {
-  console.log(req.body, 'req.body-POST');
+  // console.log(req.body, 'req.body-POST');
+  // console.log(req.body.bookshelf, 'BOOKSHELF to itirate');
 
   const bookPromises = req.body.bookshelf.map(item => {
+    // console.log(item, "One book");
     return Library.create({
       title: item.title,
       pages: item.pages || null,
@@ -18,7 +20,7 @@ router.post('/', function(req, res) {
       pubDate: new Date(item.publishDate) || "no date",
       genre: item.genre,
       rating: item.rating,
-      cover: item.cover || "no cover",
+      cover: item.cover,
       synopsis: item.synopsis,
     })
   })
@@ -29,7 +31,7 @@ router.post('/', function(req, res) {
     return res.status(200).send(value);
   })
   .catch(err => {
-    // console.log(err, "Error!");
+    console.log(err, "Error!");
     res.status(500).send("There was a problem adding book(s) to the database.")
   })
 });
