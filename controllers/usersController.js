@@ -40,25 +40,25 @@ router.post('/register', function(req, res) {
 });
 
 //Check User Access Token //NEEDS CLARIFICATION!!!
-router.get('/me', function(req, res) {
-  console.log(req.body, 'REQ');
-  console.log(res.body, "RES");
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-
-  jwt.verify(token, authSecret.secret, function(err, decoded) {
-    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-
-    User.findById(decoded.id,
-      { password: 0 }, // projection
-      function (err, user) {
-        if (err) return res.status(500).send("There was a problem finding the user.");
-        if (!user) return res.status(404).send("No user found.");
-
-        res.status(200).send(user);
-    });
-  });
-});
+// const authenticationMiddleware = (req, res, next) {
+//   // console.log(req.body, 'REQ');
+//   // console.log(res.body, "RES");
+//   var token = req.headers['x-access-token'];
+//   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+//
+//   jwt.verify(token, authSecret.secret, function(err, decoded) {
+//     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+//
+//     User.findById(decoded.id,
+//       { password: 0 }, // projection
+//       function (err, user) {
+//         if (err) return res.status(500).send("There was a problem finding the user.");
+//         if (!user) return res.status(404).send("No user found.");
+//
+//         next();
+//     });
+//   });
+// }
 
 //LOGIN
 //req.body = { email: 'natalia_calt@yahoo.com', password: 'password' }
@@ -67,9 +67,9 @@ router.get('/me', function(req, res) {
 //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCIU..."
 // }
 router.post('/login', function(req, res) {
-  console.log(req.body, 'Body from LOGIN');
+  // console.log(req.body, 'Body from LOGIN');
   Users.findOne({ email: req.body.email }, function (err, user) {
-    console.log(user, 'USER');
+    // console.log(user, 'USER');
     if (err) return res.status(500).send('Error on the server.');
     if (!user) return res.status(404).send('No user found.');
 
