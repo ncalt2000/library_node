@@ -11,12 +11,6 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
 //Register/Create new user
-//req.body: {
-//     "firstName" : "Ian",
-//     "lastName": "Strouse",
-//     "email": "ian.strouse@gmail.com",
-//     "password" : "blah"
-// }
 router.post('/register', function(req, res) {
   console.log(req.body, "BODY");
   var hashedPassword = bcryptjs.hashSync(req.body.password, 8);
@@ -29,7 +23,6 @@ router.post('/register', function(req, res) {
   function (err, user) {
     console.log(user, 'USER');
     if (err) return res.status(500).send("There was a problem registering the user.")
-
     // create a token
     var token = jwt.sign({ id: user._id }, authSecret.secret, {
       expiresIn: 86400 // expires in 24 hours
@@ -41,11 +34,6 @@ router.post('/register', function(req, res) {
 
 
 //LOGIN
-//req.body = { email: 'natalia_calt@yahoo.com', password: 'password' }
-//if OK, res.send {
-//     "auth": true,
-//     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCIU..."
-// }
 router.post('/login', function(req, res) {
   // console.log(req.body, 'Body from LOGIN');
   Users.findOne({ email: req.body.email }, function (err, user) {
@@ -68,7 +56,5 @@ router.post('/login', function(req, res) {
 router.get('/logout', function(req, res) {
   res.status(200).send({ auth: false, token: null });
 });
-
-
 
 module.exports = router;
