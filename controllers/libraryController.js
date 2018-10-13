@@ -61,13 +61,11 @@ router.post('/', authenticationMiddleware, function(req, res) {
 
 // RETURNS ALL BOOKS IN THE DATABASE
 router.get('/', function(req, res) {
-  console.log('get all books route');
+  // console.log('get all books route');
   Library.find({}, function(err, books) {
-    if (err){
-      console.log('error', err);
-      return res.status(500).send('There was a problem finding books in library.');}
-      // eslint-disable-next-line
-    console.log('get all books success');
+    if (err) return res.status(500).send('There was a problem finding books in library.');
+    // eslint-disable-next-line
+    // console.log('get all books success');
     res.status(200).send(books);
   });
 });
