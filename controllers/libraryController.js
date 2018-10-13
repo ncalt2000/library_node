@@ -12,7 +12,6 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // Middleware to verify the token
 const authenticationMiddleware = (req, res, next) => {
-  console.log(req.headers, 'HEADRES');
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
@@ -62,12 +61,11 @@ router.post('/', authenticationMiddleware, function(req, res) {
 
 // RETURNS ALL BOOKS IN THE DATABASE
 router.get('/', function(req, res) {
-  console.log('get all books');
   // console.log(res.body, 'red.body-GET ALL');
   Library.find({}, function(err, books) {
     if (err)
       return res.status(500).send("There was a problem finding books in library.");
-    console.log('get all books success');
+    // console.log('get all books success');
     res.status(200).send(books);
   });
 });
@@ -93,7 +91,6 @@ router.put('/:id', authenticationMiddleware, function(req, res) {
     if (err) {
       return res.status(500).send(err)
     }
-    console.log('put book success');
     res.status(200).send(response)
   })
 });
