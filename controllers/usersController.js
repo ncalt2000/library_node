@@ -1,5 +1,4 @@
 var express = require('express');
-var app = express();
 var jwt = require('jsonwebtoken');
 var bcryptjs = require('bcrypt');
 var bodyParser = require('body-parser');
@@ -15,8 +14,8 @@ router.post('/register', function(req, res) {
   // console.log(req.body, "BODY");
   var hashedPassword = bcryptjs.hashSync(req.body.password, 8);
   Users.findOne({ email: req.body.email }, function (err, user) {
-    // console.log(user, 'USER');
-    console.log(user, 'USER EXIST');
+    // console.log(user, "USER");
+    // console.log(user, 'USER EXIST');
     if (err) return res.status(500).send('Error on the server.');
     if (user) return res.status(200).send({ auth: false, msg: 'This email already registered!' });
     if(!user){
@@ -27,8 +26,8 @@ router.post('/register', function(req, res) {
         password : hashedPassword
       },
       function (err, user) {
-        // console.log(user, 'USER');
-        if (err) return res.status(500).send("There was a problem registering the user.")
+        // console.log(user, "USER");
+        if (err) return res.status(500).send('There was a problem registering the user.');
         // create a token
         var token = jwt.sign({ id: user._id }, authSecret.secret, {
           expiresIn: 86400 // expires in 24 hours
