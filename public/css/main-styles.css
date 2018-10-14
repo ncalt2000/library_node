@@ -29,7 +29,7 @@ body h2{
 nav {
   background-color: rgb(29, 32, 42);
   color: #E5E5E8;
-  height: 80px;
+  height: 100%;
 }
 .nav-expanded{
   background-color: rgb(29, 32, 42);

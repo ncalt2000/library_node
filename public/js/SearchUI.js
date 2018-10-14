@@ -5,11 +5,15 @@ class Search {
 
   _bindEvents() {
     $('button#search-btn').on('click', this._getSearchResults.bind(this));
+  }
+
+  _bindCustomEvents() {
     $('button#clearSearchResults').on('click', this._clearSearchResults.bind(this));
   }
 
   _clearSearchResults() {
     $('#searchResults').empty();
+    window.location='/#navBar';
   }
 
   _getSearchResults(e) {
@@ -30,7 +34,7 @@ class Search {
 
     if (resultArr.length > 0) {
       for (let i = 0; i < resultArr.length; i++) {
-        const media = $('<div>', {class: 'media w-100 shadow p-3 m-2 bg-beige rounded anomated zoomIn'});
+        const media = $('<div>', {class: 'media w-100 shadow p-3 m-2 bg-beige rounded animated zoomIn'});
         const bookCover = $('<img>', { class: 'align-self-center mr-3', src: `${resultArr[i].cover}`, style: 'width: 80px' });
         const mediaBody = $('<div>', {class: 'media-body'});
         const cardTitle = $('<h5>', { class: 'my-1 font-weight-bold' }).text(resultArr[i].title);
@@ -52,7 +56,7 @@ class Search {
 
     window.location = '/#mainDivStart';
     $('#search-input').val('');
-    this._bindEvents();
+    this._bindCustomEvents();
   }
 }
 
