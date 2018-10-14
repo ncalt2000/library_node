@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var Library = require('../models/library.js');
 var jwt = require('jsonwebtoken');
-var authSecret = require('../config/auth.js');
+var authSecret = process.env.SECRET;
 var Users = require('../models/users.js');
 
 var router = express.Router();
@@ -14,7 +14,7 @@ const authenticationMiddleware = (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
-  jwt.verify(token, authSecret.secret, function(err, decoded) {
+  jwt.verify(token, authSecret, function(err, decoded) {
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
 
     Users.findById(decoded.id,

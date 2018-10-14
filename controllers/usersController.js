@@ -4,7 +4,7 @@ var bcryptjs = require('bcrypt');
 var bodyParser = require('body-parser');
 var Users = require('../models/users.js');
 var router = express.Router();
-var authSecret = require('../config/auth.js');
+var authSecret = process.env.SECRET;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -29,7 +29,7 @@ router.post('/register', function(req, res) {
         // console.log(user, "USER");
         if (err) return res.status(500).send('There was a problem registering the user.');
         // create a token
-        var token = jwt.sign({ id: user._id }, authSecret.secret, {
+        var token = jwt.sign({ id: user._id }, authSecret, {
           expiresIn: 86400 // expires in 24 hours
         });
         res.status(200).send({ auth: true, token: token, user: user.firstName});
@@ -50,7 +50,7 @@ router.post('/login', function(req, res) {
     var passwordIsValid = bcryptjs.compareSync(req.body.password, user.password);
     if (!passwordIsValid) return res.status(200).send({ auth: false, token: null, msg: 'Your email or password is incorrect!' });
 
-    var token = jwt.sign({ id: user._id }, authSecret.secret, {
+    var token = jwt.sign({ id: user._id }, authSecret, {
       expiresIn: 86400 // expires in 24 hours
     });
 
