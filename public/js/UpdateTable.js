@@ -280,7 +280,7 @@ class DataTable {
       'data-id': book._id,
     });
     const ratingList = $('<ul>', {
-      class: 'stars w-100',
+      class: 'stars w-100 d-flex flex-nowrap',
       id: 'ratingStar',
     });
 

@@ -14,18 +14,16 @@ class RandomBookOrAuthor {
     const image = $('<img>', {
       class: 'img-thumbnail col-md-4',
       src: `${book.cover}`,
-      alt: 'random book cover',
+      alt: `${book.title} cover`,
+      style: 'width: 50px'
     });
-    const div = $('<div>', { class: 'col-md-6' });
+    const div = $('<div>', { class: 'col-md-8' });
 
     image.text(book.cover);
-    const title = $('<h5>').text(book.title);
+    const title = $('<h5>', {class: 'my-1 font-weight-bold'}).text(book.title);
     const author = $('<h6>').text(book.author);
-    const genre = $('<h6>').text(book.genre);
-    const pages = $('<h6>').text(book.pages);
     const synopsis = $('<h6>').text(book.synopsis);
-    div.append(title).append(author).append(genre).append(pages)
-      .append(synopsis);
+    div.append(title).append(author).append(synopsis);
     form.append(image).append(div);
     form.append(div);
     return form;
@@ -38,7 +36,7 @@ class RandomBookOrAuthor {
     if (randomBook) {
       $('#randomBookModal').modal('show');
       $('#randomBookModal').find('.modal-body').html(this._createRandomBook(randomBook));
-      $('#randomBookModal').find('.modal-title').html('Universe Suggests ...');
+      $('#randomBookModal').find('.modal-title').html('Universe Suggests you to read...');
     } else {
       $('#book-table').empty();
       const message = $('<h1>', { class: 'text-danger text-center' }).html('Your Library is Empty!  🙁');
@@ -50,12 +48,24 @@ class RandomBookOrAuthor {
     const allBooks = window.gDataTable._getGlobalBooks();
     const randomBook = allBooks[Math.floor(Math.random() * allBooks.length)];
     if (randomBook) {
-      const body = $('<div>', { class: 'text-center' });
-      const author = $('<h4>').text(randomBook.author);
-      body.append(author);
+      const body = $('<div>');
+      const author = $('<h4>', { class: 'text-center' }).text(randomBook.author);
+      const list = $('<ol>');
+      allBooks.filter(book => book.author === randomBook.author)
+        .forEach(bookByAuthor => {
+          const listItem = $('<li>');
+          listItem.text(bookByAuthor.title);
+          list.append(listItem);
+        });
+      const text = $('<p>').text('And this author\'s books:');
+      body.append(author).append(text).append(list);
       $('#randomBookModal').modal('show');
       $('#randomBookModal').find('.modal-body').html(body);
       $('#randomBookModal').find('.modal-title').html('Universe sends you ...');
+    } else {
+      $('#book-table').empty();
+      const message = $('<h1>', { class: 'text-danger text-center' }).html('Your Library is Empty!  🙁');
+      $('#book-table').append(message);
     }
   }
 

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/vendor/bootstrap.css">
   <link rel="stylesheet" href="css/vendor/animate.css">
   <link rel="stylesheet" href="css/vendor/web-fonts-with-css/css/fontawesome-all.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700" rel="stylesheet">
   <link rel="stylesheet" href="css/main-styles.css">
 
   <title>Library</title>
@@ -140,7 +141,7 @@
                   </div>
                   <div class="custom-file">
                     <input type="file" class="custom-file-input form-control" id="file-upload" onchange="$('#upload-file-info').val($(this).val());">
-                    <input placeholder="Click to add file" class="custom-file-label w-100" id="upload-file-info"/>
+                    <input placeholder="Click to add file" class="custom-file-label w-100" id="upload-file-info" />
                   </div>
                 </div>
               </div>
@@ -223,7 +224,7 @@
                 </div>
                 <div class="custom-file">
                   <input type="file" class="custom-file-input form-control" id="file-upload-edit" onchange="$('#upload-file-edit-info').val($(this).val());">
-                  <input placeholder="Click to add file" class="custom-file-label w-100" id="upload-file-edit-info"/>
+                  <input placeholder="Click to add file" class="custom-file-label w-100" id="upload-file-edit-info" />
                 </div>
               </div>
             </form>
@@ -345,45 +346,45 @@
     <!-- End of Failure Modal -->
 
     <!-- Found Books -->
-    <div class="container-fluid" id="mainDivStart">
+    <div class="container" id="mainDivStart">
       <div class="row d-flex justify-content-center mb-5" id="searchResults">
         <!-- search Results -->
       </div>
     </div>
     <!-- End of Found Books -->
 
-    <div class="container-fluid my-5">
+    <div class="container my-5">
       <h2 id="library" class="text-center">My Library</h2>
 
       <!-- Controls -->
       <div class="row controls-container mt-5 mb-3 d-flex justify-content-between">
         <span class="col-md-2 mb-1">
-          <button id="add-book-btn" type="button" class="btn btn-primary transition-3d-hover w-100" data-toggle="tooltip" data-placement="top" title="Add New Book">
+          <button id="add-book-btn" type="button" class="btn btn-primary transition-3d-hover w-100 shadow" data-toggle="tooltip" data-placement="top" title="Add New Book">
             <i class="fas fa-book"></i>
             New Book
           </button>
         </span>
         <span class="col-md-2 mb-1">
-          <button id="random-book-btn" type="button" class="btn btn-secondary transition-3d-hover btn-sm w-100" data-toggle="tooltip" data-placement="top" title="Random Book">
+          <button id="random-book-btn" type="button" class="btn btn-secondary btn-sm w-100 shadow" data-toggle="tooltip" data-placement="top" title="Random Book">
             <i class="fas fa-gift"></i>
             Lucky Book
           </button>
         </span>
         <span class="col-md-2 mb-1">
-          <button id="random-author-btn" type="button" class="btn btn-secondary transition-3d-hover btn-sm w-100" data-toggle="tooltip" data-placement="top" title="Random Author">
+          <button id="random-author-btn" type="button" class="btn btn-secondary shadow btn-sm w-100" data-toggle="tooltip" data-placement="top" title="Random Author">
             <i class="fas fa-pencil-alt"></i>
             Lucky Author
           </button>
         </span>
         <span class="col-md-2 mb-1">
-          <button type="button" class="btn btn-secondary transition-3d-hover btn-sm w-100" id='showAllAuthorsBtn' data-toggle="tooltip" data-placement="top" title="List of authors">
+          <button type="button" class="btn btn-secondary shadow btn-sm w-100" id='showAllAuthorsBtn' data-toggle="tooltip" data-placement="top" title="List of authors">
             <i class="fas fa-list-alt"></i>
             All Authors
           </button>
         </span>
         <span class="col-md-2 mb-1">
           <div class="dropdown">
-            <button class="btn btn-secondary btn-sm w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>
+            <button class="btn btn-secondary btn-sm w-100 dropdown-toggle shadow" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>
               Sort By
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -398,7 +399,7 @@
       <!-- End of Controls -->
 
       <!-- Table -->
-      <table id="book-table" class="table table-hover table-responsive-md">
+      <table id="book-table" class="table bg-beige table-hover table-responsive-md">
         <thead class="thead-dark">
           <!-- _createHeader() is invoked here -->
         </thead>

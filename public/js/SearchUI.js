@@ -30,31 +30,22 @@ class Search {
 
     if (resultArr.length > 0) {
       for (let i = 0; i < resultArr.length; i++) {
-        const container = $('<div>', { class: 'custom-container' });
-        const back = $('<div>', { class: 'back' });
-        const columnDiv = $('<div>', { class: 'flipper' });
-        const span = $('<span>', { class: 'front' });
-        const card = $('<div>', { class: 'card card-inverse card-info animated zoomIn m-5' });
-        const bookCover = $('<img>', { class: 'card-img-top book-card' }).text(resultArr[i].cover);
-        bookCover.attr('src', `${resultArr[i].cover}`).attr('alt', `${resultArr[i].title} cover`);
-        const cardBody = $('<div>', { class: 'card-body p-2' });
-        const cardTitle = $('<h5>', { class: 'card-title ' }).text(resultArr[i].title);
-        const cardAuthor = $('<h6>', { class: 'card-author ' }).text(resultArr[i].author);
-        const synopsis = $('<p>', { class: 'card-text text-justify p-2' }).text(resultArr[i].synopsis);
+        const media = $('<div>', {class: 'media w-100 shadow p-3 m-2 bg-beige rounded anomated zoomIn'});
+        const bookCover = $('<img>', { class: 'align-self-center mr-3', src: `${resultArr[i].cover}`, style: 'width: 80px' });
+        const mediaBody = $('<div>', {class: 'media-body'});
+        const cardTitle = $('<h5>', { class: 'my-1 font-weight-bold' }).text(resultArr[i].title);
+        const cardAuthor = $('<h6>', { class: 'mt-0 font-italic' }).text(`by ${resultArr[i].author}`);
+        const synopsis = $('<p>').text(resultArr[i].synopsis);
 
-        span.html(card);
-        card.html(bookCover).append(cardBody);
-        cardBody.html(cardTitle);
-        cardBody.append(cardAuthor);
-        resultArr[i].synopsis === '' ? back.html('No Synopsis Available!') : back.html(synopsis);
-        columnDiv.append(back);
-        columnDiv.append(span);
-        container.append(columnDiv);
+        resultArr[i].synopsis === '' ? synopsis.html('No Synopsis Available!') : synopsis.html(resultArr[i].synopsis);
 
-        $('#searchResults').append(container);
+        media.append(bookCover).append(mediaBody);
+        mediaBody.append(cardTitle).append(cardAuthor).append(synopsis);
+
+        $('#searchResults').append(media);
       }
-      const bottomDiv = $('<div>', { class: 'col-md-12 d-flex justify-content-center' });
-      const clearResultsBtn = $('<button>', { class: 'col-2 btn btn-secondary', text: 'Clear the Results', id: 'clearSearchResults' });
+      const bottomDiv = $('<div>', { class: 'col-md-12 mt-3 d-flex justify-content-end' });
+      const clearResultsBtn = $('<button>', { class: 'col-2 btn btn-warning font-weight-bold shadow', text: 'Clear the Results', id: 'clearSearchResults' });
       bottomDiv.append(clearResultsBtn);
       $('#searchResults').append(bottomDiv);
     }

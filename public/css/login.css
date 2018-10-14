@@ -9,7 +9,7 @@ body{
 
 .login-page{
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 80px);
   background: linear-gradient(to bottom, rgba(0, 47, 75, 0.5), rgba(194, 126, 113, 0.99)), url('../assets/reading.jpg'), no-repeat;
   background-position: center;
   background-size: cover;

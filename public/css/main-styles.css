@@ -4,7 +4,8 @@ html {
   box-sizing: border-box;
 }
 body{
-  background-color: rgba(78, 72, 72, 0.43);
+  font-family: 'Lato', sans-serif;
+  background-image: linear-gradient( rgba(143, 143, 148, 0.85), rgba(143, 143, 148, 0.85)), url("../assets/texture.jpg")
 }
 body h2{
   color: white;
@@ -15,6 +16,10 @@ body h2{
 }
 .btn:active{
   transform: scale(.9);
+}
+
+.bg-beige{
+  background-color: #EBE7E1;
 }
 
 /* ---------------------- */
@@ -54,9 +59,9 @@ nav {
 /* ---------------------- */
 
 .banner {
-  height: 100vh;
+  height: calc(100vh - 80px);
   width: 100%;
-  background-image: linear-gradient( rgba(0, 0, 0, .3), rgba(0, 0, 0, .3)), url("../assets/bookshelf.jpg");
+  background-image: linear-gradient( rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url("../assets/bookshelf.jpg");
 }
 
 .search-group {
@@ -76,9 +81,6 @@ nav {
 /* ---------------------------- */
 /* TABLE                        */
 /* ---------------------------- */
-table{
-  background-color: #EBE7E1 !important;
-}
 table td, table th {
   vertical-align: middle !important;
 }
@@ -140,23 +142,23 @@ td .edit, td .delete {
 }
 	/* flip the pane when hovered */
 .custom-container:hover .flipper,
-.custom-container.hover .flipper {
+.custom-container:hover .flipper {
 	transform: rotateY(180deg);
 }
 
 .custom-container, .front, .back {
 	width: 250px;
-	height: 400px;
+	height: 300px;
   margin: 10px;
 }
 
 /* flip speed goes here */
 .flipper {
-  max-height: 200px;
-  max-width: 300px;
+  max-height: 250px;
+  max-width: 400px;
 	transition: 1s;
 	transform-style: preserve-3d;
-	position: relative;
+	/* position: relative; */
 }
 
 /* hide back of pane during swap */
@@ -178,6 +180,7 @@ td .edit, td .delete {
 .back {
   background-color: #eaeaed;
 	transform: rotateY(180deg);
+  z-index: 0;
   min-height: auto;
   overflow: scroll;
 
@@ -295,17 +298,18 @@ td .edit, td .delete {
 /* -------------------- */
 .loader {
   height: 300px;
-  background-color: rgba(26, 24, 24, 0.21);
+  /* background-color: rgba(26, 24, 24, 0.21); */
+  background-color: #EBE7E1;
   position: relative;
 }
 .loader::before {
   animation: 2s linear infinite loader;
-  border: solid 10px #eee;
+  border: solid 5px #eee;
   border-left-color: #73AF55;
   border-radius: 100%;
   content: "";
-  height: 100px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
   left: 50%;
   opacity: inherit;
   position: absolute;
