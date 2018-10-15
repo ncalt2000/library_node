@@ -139,62 +139,6 @@ td .edit, td .delete {
   color: #FF652D;
 }
 
-/* -------------------------- */
-/* CARD FLIPPER               */
-/* -------------------------- */
-
-
-/* entire container, keeps perspective */
-.custom-container {
-	perspective: 1000px;
-}
-	/* flip the pane when hovered */
-.custom-container:hover .flipper,
-.custom-container:hover .flipper {
-	transform: rotateY(180deg);
-}
-
-.custom-container, .front, .back {
-	width: 250px;
-	height: 300px;
-  margin: 10px;
-}
-
-/* flip speed goes here */
-.flipper {
-  max-height: 250px;
-  max-width: 400px;
-	transition: 1s;
-	transform-style: preserve-3d;
-	/* position: relative; */
-}
-
-/* hide back of pane during swap */
-.front, .back {
-	backface-visibility: hidden;
-	position: absolute;
-	/* top: 0;
-	left: 20px; */
-}
-
-/* front pane, placed above back */
-.front {
-	z-index: 2;
-	/* for firefox 31 */
-	transform: rotateY(0deg);
-}
-
-/* back, initially hidden pane */
-.back {
-  background-color: #eaeaed;
-	transform: rotateY(180deg);
-  z-index: 0;
-  min-height: auto;
-  overflow: scroll;
-
-  /* margin: 20px; */
-}
-
 /* ---------------------------- */
 /* CHECKMARK ANIMATION */
 /* ---------------------------- */
@@ -333,5 +277,21 @@ td .edit, td .delete {
   }
   100% {
        transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
+}
+
+/* -------------------- */
+/* MEDIA QUERIES */
+/* -------------------- */
+
+@media screen and (max-width: 678px){
+  .banner-quote .h1{
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 400px){
+  .banner-quote .h1{
+    font-size: 20px;
   }
 }
