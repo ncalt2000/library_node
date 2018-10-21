@@ -2,17 +2,24 @@ class DataTable {
   constructor() {
     this.libraryURL = '/library/';
     this.allBooks = [];
-    this.bookId = null;
   }
 
   _init() {
     this._getAllBooks();
   }
 
-  _getGlobalBooks() {
-  // make this.allBooks available in other classes
-  // and avoid making another API call
-    return this.allBooks;
+  _bindEvents() {
+
+    $('.star').on('click', window.gRateBook._rateBook);
+
+    $('.delete').on('click', window.gDeleteBook._openDeleteModal);
+
+    $('.edit').on('click', window.gEditBook._openEditModal);
+
+    $('#sort-title').on('click', window.gSortBook._sortBy);
+    $('#sort-author').on('click', window.gSortBook._sortBy);
+    $('#sort-genre').on('click', window.gSortBook._sortBy);
+    $('#sort-rating').on('click', window.gSortBook._sortBy);
   }
 
   _reload() {
@@ -52,7 +59,6 @@ class DataTable {
   }
 
   _updateTable() {
-    // console.log('update table');
     const $tbody = $('#table-body');
     $tbody.empty();
 
@@ -67,6 +73,8 @@ class DataTable {
         && $.each(this.allBooks, (index, book) => { $tbody.append(this._createRow(index, book));})
       )
       : $tbody.html(message);
+
+    this._bindEvents();
   }
 
   ifNotLoggedIn() {

@@ -30,7 +30,7 @@ class RandomBookOrAuthor {
   }
 
   _showRandomBook() {
-    const allBooks = window.gDataTable._getGlobalBooks();
+    const allBooks = window.gDataTable.allBooks;
     const randomBook = allBooks[Math.floor(Math.random() * allBooks.length)];
 
     if (randomBook) {
@@ -45,7 +45,7 @@ class RandomBookOrAuthor {
   }
 
   _showRandomAuthor() {
-    const allBooks = window.gDataTable._getGlobalBooks();
+    const allBooks = window.gDataTable.allBooks;
     const randomBook = allBooks[Math.floor(Math.random() * allBooks.length)];
     if (randomBook) {
       const body = $('<div>');
@@ -70,7 +70,7 @@ class RandomBookOrAuthor {
   }
 
   _handleShowAuthors() {
-    const allBooks = window.gDataTable._getGlobalBooks();
+    const allBooks = window.gDataTable.allBooks;
     const resultArr = [];
     for (var i = 0; i < allBooks.length; i++) {
       resultArr.push(allBooks[i].author);

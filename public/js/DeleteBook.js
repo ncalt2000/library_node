@@ -2,16 +2,21 @@ class DeleteBook {
   constructor() {
     this.libraryURL = '/library/';
     this.bookId = null;
-  }
-
-  _init() {
-    window.gDataTable._getAllBooks();
-    this._bindEvents();
-  }
-
-  _bindEvents() {
-    console.log('Bind Events from Delete!!!');
-    $('.delete').on('click', this._openDeleteModal.bind(this));
+    this._openDeleteModal = (e) => {
+      const isLoggedIn = window.gHome.isLoggedIn;
+      if (isLoggedIn) {
+        this.bookId = $(e.target).data('id');
+        const _titleToDelete = $(e.target).data('title');
+        const deleteText = $('<p>', {id: 'delete-text'});
+        deleteText.html(`Are you sure you want to delete ${_titleToDelete}?`);
+        // eslint-disable-next-line no-unused-vars
+        const confirmDeleteText = $('.confirm-delete-text').append(deleteText);
+        $('#confirm-delete-modal').modal('show');
+        this._bindCustomListeners();
+      } else {
+        window.gDataTable.ifNotLoggedIn();
+      }
+    };
   }
 
   _bindCustomListeners() {
@@ -22,22 +27,6 @@ class DeleteBook {
   _closeModalOnCancel() {
     $('.confirm-delete-text').empty();
     $('#confirm-delete-modal').modal('hide');
-  }
-
-  _openDeleteModal(e) {
-    console.log("Hello delete modal");
-    const isLoggedIn = window.gHome.isLoggedIn;
-    if (isLoggedIn) {
-      this.bookId = $(e.target).data('id');
-      const _titleToDelete = $(e.target).data('title');
-      const deleteText = $('<p>', {id: 'delete-text'});
-      deleteText.html(`Are you sure you want to delete ${_titleToDelete}?`);
-      // eslint-disable-next-line no-unused-vars
-      const confirmDeleteText = $('.confirm-delete-text').append(deleteText);
-      $('#confirm-delete-modal').modal('show');
-    } else {
-      window.gDataTable.ifNotLoggedIn();
-    }
   }
 
   _confirmDeleteBook() {
@@ -76,5 +65,4 @@ class DeleteBook {
 
 $(() => {
   window.gDeleteBook = new DeleteBook();
-  window.gDeleteBook._init();
 });

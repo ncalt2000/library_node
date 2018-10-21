@@ -1,46 +1,40 @@
 class EditBook {
   constructor() {
     this.libraryURL = '/library/';
-    this.allBooks = [];
+    // this.allBooks = [];
     this.bookId = null;
+    this._openEditModal = e => {
+      const isLoggedIn = window.gHome.isLoggedIn;
+      if (isLoggedIn) {
+        $('#edit-book-modal').modal('show');
+
+        this.bookId = $(e.target).data('id');
+        const bookToEdit = window.gDataTable.allBooks.filter(item => item._id === this.bookId);
+
+        const parsedDate = window.parseFormDate(bookToEdit[0].pubDate);
+
+        // console.log(bookToEdit, 'BOOK to EDIT');
+        $('#title-edit').val(bookToEdit[0].title);
+        $('#author-edit').val(bookToEdit[0].author);
+        $('#genre-edit').val(bookToEdit[0].genre);
+        $('#pages-edit').val(bookToEdit[0].pages);
+        $('#publicationDate-edit').val(parsedDate);
+        $('#synopsis-edit').val(bookToEdit[0].synopsis);
+        $('#file-upload-edit').val(bookToEdit[0].cover);
+
+        this._bindCustomListeners();
+      } else {
+        window.gDataTable.ifNotLoggedIn();
+      }
+    };
   }
 
   _init() {
-    window.gDataTable._getAllBooks();
     this._bindCustomListeners();
-  }
-
-  _bindEvents() {
-    console.log('Bind events from Edit!!!');
-    $('.edit').on('click', this._openEditModal.bind(this));
   }
 
   _bindCustomListeners() {
     $('#save-edit-btn').on('click', this._editBook.bind(this));
-  }
-
-  _openEditModal(e) {
-    console.log('Edit modal open');
-    const isLoggedIn = window.gHome.isLoggedIn;
-    if (isLoggedIn) {
-      $('#edit-book-modal').modal('show');
-
-      this.bookId = $(e.target).data('id');
-      const bookToEdit = this.allBooks.filter(item => item._id === this.bookId);
-
-      const parsedDate = window.parseFormDate(bookToEdit[0].pubDate);
-
-      // console.log(bookToEdit, 'BOOK to EDIT');
-      $('#title-edit').val(bookToEdit[0].title);
-      $('#author-edit').val(bookToEdit[0].author);
-      $('#genre-edit').val(bookToEdit[0].genre);
-      $('#pages-edit').val(bookToEdit[0].pages);
-      $('#publicationDate-edit').val(parsedDate);
-      $('#synopsis-edit').val(bookToEdit[0].synopsis);
-      $('#file-upload-edit').val(bookToEdit[0].cover);
-    } else {
-      this.ifNotLoggedIn();
-    }
   }
 
   _saveEditedBook(id) {
@@ -93,7 +87,7 @@ class EditBook {
             $('#success-modal').removeClass('zoomOut');
             $('#success-modal').addClass('zoomIn');
           }, 1500);
-          this._getAllBooks();
+          window.gDataTable._getAllBooks();
         },
       });
     }, 100);
