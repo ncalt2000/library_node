@@ -14,7 +14,7 @@ class Search {
 
   _clearSearchResults() {
     $('#searchResults').empty();
-    window.location='/#navBar';
+    window.location='/#body';
   }
 
   _getSearchResults(e) {
