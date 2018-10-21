@@ -30,7 +30,7 @@ router.post('/register', function(req, res) {
         if (err) return res.status(500).send('There was a problem registering the user.');
         // create a token
         var token = jwt.sign({ id: user._id }, authSecret, {
-          expiresIn: 86400 // expires in 24 hours
+          expiresIn: 36000 // expires in 10 hours
         });
         res.status(200).send({ auth: true, token: token, user: user.firstName});
       });
@@ -51,7 +51,7 @@ router.post('/login', function(req, res) {
     if (!passwordIsValid) return res.status(200).send({ auth: false, token: null, msg: 'Your email or password is incorrect!' });
 
     var token = jwt.sign({ id: user._id }, authSecret, {
-      expiresIn: 86400 // expires in 24 hours
+      expiresIn: 36000 // expires in 10 hours
     });
 
     res.status(200).send({ auth: true, token: token, user: user.firstName });
