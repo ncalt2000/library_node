@@ -1,4 +1,5 @@
 class Search {
+
   _init() {
     this._bindEvents();
   }
@@ -18,7 +19,7 @@ class Search {
 
   _getSearchResults(e) {
     e.preventDefault();
-    const allBooks = window.gDataTable._getGlobalBooks();
+    const allBooks = window.gDataTable.allBooks;
 
     const inputTerm = $('#search-input').val();
 

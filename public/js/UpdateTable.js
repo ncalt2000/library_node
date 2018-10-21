@@ -2,45 +2,28 @@ class DataTable {
   constructor() {
     this.libraryURL = '/library/';
     this.allBooks = [];
-    this.bookId = null;
   }
 
   _init() {
     this._getAllBooks();
-    this._bindCustomListeners();
   }
 
-  _getGlobalBooks() {
-  // make this.allBooks available in other classes
-  // and avoid making another API call
-    return this.allBooks;
+  _bindEvents() {
+
+    $('.star').on('click', window.gRateBook._rateBook);
+
+    $('.delete').on('click', window.gDeleteBook._openDeleteModal);
+
+    $('.edit').on('click', window.gEditBook._openEditModal);
+
+    $('#sort-title').on('click', window.gSortBook._sortBy);
+    $('#sort-author').on('click', window.gSortBook._sortBy);
+    $('#sort-genre').on('click', window.gSortBook._sortBy);
+    $('#sort-rating').on('click', window.gSortBook._sortBy);
   }
 
   _reload() {
     this._updateTable();
-    this._bindEvents();
-  }
-
-  _bindEvents() {
-    $('.delete').on('click', this._openDeleteModal.bind(this));
-    $('.edit').on('click', this._openEditModal.bind(this));
-    $('.star').on('click', this._rateBook.bind(this));
-  }
-
-  _bindCustomListeners() {
-    $('#confirm-cancel-btn').on('click', this._closeModalOnCancel.bind(this));
-    $('#confirm-delete-btn').on('click', this._confirmDeleteBook.bind(this));
-    $('#save-edit-btn').on('click', this._editBook.bind(this));
-
-    $('#sort-title').on('click', this._sortBy.bind(this));
-    $('#sort-author').on('click', this._sortBy.bind(this));
-    $('#sort-genre').on('click', this._sortBy.bind(this));
-    $('#sort-rating').on('click', this._sortBy.bind(this));
-  }
-
-  _closeModalOnCancel() {
-    $('.confirm-delete-text').empty();
-    $('#confirm-delete-modal').modal('hide');
   }
 
   _getAllBooks() {
@@ -76,7 +59,6 @@ class DataTable {
   }
 
   _updateTable() {
-    // console.log('update table');
     const $tbody = $('#table-body');
     $tbody.empty();
 
@@ -91,6 +73,8 @@ class DataTable {
         && $.each(this.allBooks, (index, book) => { $tbody.append(this._createRow(index, book));})
       )
       : $tbody.html(message);
+
+    this._bindEvents();
   }
 
   ifNotLoggedIn() {
@@ -100,136 +84,6 @@ class DataTable {
     $('#randomBookModal').modal('show');
     $('#randomBookModal').find('.modal-body').html(body);
     $('#randomBookModal').find('.modal-title').html('Please sign-in to update your Library!');
-  }
-
-  _openDeleteModal(e) {
-    const isLoggedIn = window.gHome.isLoggedIn;
-    if (isLoggedIn) {
-      this.bookId = $(e.target).data('id');
-      const _titleToDelete = $(e.target).data('title');
-      const deleteText = $('<p>', { id: 'delete-text' });
-      deleteText.html(`Are you sure you want to delete ${_titleToDelete}?`);
-      // eslint-disable-next-line no-unused-vars
-      const confirmDeleteText = $('.confirm-delete-text').append(deleteText);
-      $('#confirm-delete-modal').modal('show');
-    } else {
-      this.ifNotLoggedIn();
-    }
-  }
-
-  _openEditModal(e) {
-    const isLoggedIn = window.gHome.isLoggedIn;
-    if (isLoggedIn) {
-      $('#edit-book-modal').modal('show');
-
-      this.bookId = $(e.target).data('id');
-      const bookToEdit = this.allBooks.filter(item => item._id === this.bookId);
-
-      const parsedDate = window.parseFormDate(bookToEdit[0].pubDate);
-
-      // console.log(bookToEdit, 'BOOK to EDIT');
-      $('#title-edit').val(bookToEdit[0].title);
-      $('#author-edit').val(bookToEdit[0].author);
-      $('#genre-edit').val(bookToEdit[0].genre);
-      $('#pages-edit').val(bookToEdit[0].pages);
-      $('#publicationDate-edit').val(parsedDate);
-      $('#synopsis-edit').val(bookToEdit[0].synopsis);
-      $('#file-upload-edit').val(bookToEdit[0].cover);
-    } else {
-      this.ifNotLoggedIn();
-    }
-  }
-
-  _saveEditedBook(id) {
-    const newTitle = $('#title-edit').val();
-    const newAuthor = $('#author-edit').val();
-    const newGenre = $('#genre-edit').val();
-    const newPages = $('#pages-edit').val();
-    const newPubDate = $('#publicationDate-edit').val();
-    const newSynopsis = $('#synopsis-edit').val();
-    let newCover = $('#file-upload-edit').val();
-    const noBookCover = '../assets/books/noCover.jpg';
-
-    const file = document.querySelector('#file-upload-edit').files[0];
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-      // console.log(reader.result);
-        newCover = reader.result;
-      };
-    } else {
-      newCover = noBookCover;
-    }
-
-    setTimeout(() => {
-      const editedBook = {
-        cover: newCover,
-        title: newTitle,
-        author: newAuthor,
-        genre: newGenre,
-        pages: newPages,
-        pubDate: newPubDate,
-        synopsis: newSynopsis,
-      };
-      $.ajax({
-        url: `${this.libraryURL}${id}`,
-        method: 'PUT',
-        dataType: 'json',
-        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
-        data: editedBook,
-        success: () => {
-        // console.log(data, 'Edited Book from DB');
-          $('#success-modal').modal('show');
-          setTimeout(() => {
-            $('#success-modal').removeClass('zoomIn');
-            $('#success-modal').addClass('zoomOut');
-          }, 1000);
-          setTimeout(() => {
-            $('#success-modal').modal('hide');
-            $('#success-modal').removeClass('zoomOut');
-            $('#success-modal').addClass('zoomIn');
-          }, 1500);
-          this._getAllBooks();
-        },
-      });
-    }, 100);
-
-    $('#edit-book-modal').modal('hide');
-  }
-
-  _editBook() {
-    this._saveEditedBook(this.bookId);
-  }
-
-  _confirmDeleteBook() {
-    this._handleDeleteBook(this.bookId);
-  }
-
-  _handleDeleteBook(id) {
-    $.ajax({
-      url: `${this.libraryURL}${id}`,
-      method: 'DELETE',
-      dataType: 'json',
-      headers: { 'x-access-token': localStorage.getItem('jwt_token') },
-      data: id,
-      success: (data) => {
-        if (data) {
-          $('#success-modal').modal('show');
-          setTimeout(() => {
-            $('#success-modal').removeClass('zoomIn');
-            $('#success-modal').addClass('zoomOut');
-          }, 1000);
-          setTimeout(() => {
-            $('#success-modal').modal('hide');
-            $('#success-modal').removeClass('zoomOut');
-            $('#success-modal').addClass('zoomIn');
-          }, 1500);
-          $('.confirm-delete-text').empty();
-        }
-        this._getAllBooks();
-      },
-    });
   }
 
   _createHeader() {
@@ -327,44 +181,6 @@ class DataTable {
     return tr;
   }
 
-  _rateBook(e) {
-  // console.log(e, 'event');
-    this.bookId = $(e.target).data('id');
-    // console.log(this.bookId, 'Book ID');
-    const onStar = parseInt($(e.target).data('value'), 10); // The star currently selected
-
-    $.ajax({
-      url: `${this.libraryURL}${this.bookId}`,
-      method: 'PUT',
-      dataType: 'json',
-      headers: { 'x-access-token': localStorage.getItem('jwt_token') },
-      data: { rating: onStar },
-      success: (data) => {
-        if (data) {
-          this._getAllBooks();
-        } else {
-          this.ifNotLoggedIn();
-        }
-      },
-    });
-  }
-
-  _sortBy(e) {
-    const val = $(e.target).data('sort');
-    // console.log(val, "VALUE");
-    this.allBooks.sort((a, b) => {
-      if (typeof a[val] === 'number') {
-        return b[val] - a[val];
-      }
-      const itemA = a[val].toLowerCase();
-      const itemB = b[val].toLowerCase();
-      if (itemA < itemB) // sort string ascending
-      { return -1; }
-      if (itemA > itemB) return 1;
-      return 0; // default return value (no sorting)
-    });
-    this._reload();
-  }
 }
 
 $(() => {
