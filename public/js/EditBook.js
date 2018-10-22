@@ -4,6 +4,7 @@ class EditBook {
     // this.allBooks = [];
     this.bookId = null;
     this._openEditModal = e => {
+      // console.log(e.target, 'TARGET');
       const isLoggedIn = window.gHome.isLoggedIn;
       if (isLoggedIn) {
         $('#edit-book-modal').modal('show');
@@ -13,24 +14,17 @@ class EditBook {
 
         const parsedDate = window.parseFormDate(bookToEdit[0].pubDate);
 
-        // console.log(bookToEdit, 'BOOK to EDIT');
         $('#title-edit').val(bookToEdit[0].title);
         $('#author-edit').val(bookToEdit[0].author);
         $('#genre-edit').val(bookToEdit[0].genre);
         $('#pages-edit').val(bookToEdit[0].pages);
         $('#publicationDate-edit').val(parsedDate);
         $('#synopsis-edit').val(bookToEdit[0].synopsis);
-        $('#file-upload-edit').val(bookToEdit[0].cover);
-
         this._bindCustomListeners();
       } else {
         window.gDataTable.ifNotLoggedIn();
       }
     };
-  }
-
-  _init() {
-    this._bindCustomListeners();
   }
 
   _bindCustomListeners() {
@@ -44,24 +38,19 @@ class EditBook {
     const newPages = $('#pages-edit').val();
     const newPubDate = $('#publicationDate-edit').val();
     const newSynopsis = $('#synopsis-edit').val();
-    let newCover = $('#file-upload-edit').val();
-    const noBookCover = '../assets/books/noCover.jpg';
+    let newCover = '';
 
-    const file = document.querySelector('#file-upload-edit').files[0];
-    const reader = new FileReader();
-    if (file) {
+    if($('#file-upload-edit').val()){
+      const file = document.querySelector('#file-upload-edit').files[0];
+      const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function () {
-      // console.log(reader.result);
         newCover = reader.result;
       };
-    } else {
-      newCover = noBookCover;
     }
 
     setTimeout(() => {
-      const editedBook = {
-        cover: newCover,
+      let editedBook = {
         title: newTitle,
         author: newAuthor,
         genre: newGenre,
@@ -69,6 +58,12 @@ class EditBook {
         pubDate: newPubDate,
         synopsis: newSynopsis,
       };
+      if(newCover){
+        editedBook['cover'] = newCover;
+      } else {
+        editedBook;
+      }
+
       $.ajax({
         url: `${this.libraryURL}${id}`,
         method: 'PUT',
@@ -92,6 +87,7 @@ class EditBook {
       });
     }, 100);
 
+    $('#save-edit-btn').off();
     $('#edit-book-modal').modal('hide');
   }
 
@@ -103,5 +99,4 @@ class EditBook {
 
 $(() => {
   window.gEditBook = new EditBook();
-  window.gEditBook._init();
 });
