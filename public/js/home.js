@@ -26,6 +26,7 @@ class Home {
       $('#userName').children('a').text(`Welcome, ${this.userName}!`);
       $('#navSignIn').children('a').text('Log Out').attr('id', 'logout');
       $('#navSignUp').remove();
+      $('#guest-login').addClass('d-none');
     }
   }
 
