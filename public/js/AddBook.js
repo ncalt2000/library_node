@@ -44,6 +44,7 @@ class AddBooksUI {
   }
 
   _bookInLine() {
+    // console.log('book in line');
 
     const bookData = this._getFieldsFromModal();
     const noBookCover = '../assets/books/noCover.jpg';
@@ -97,48 +98,51 @@ class AddBooksUI {
     $('#add-book-form')[0].reset();
   }
 
-  async _saveBook() {
-    await this._bookInLine();
+  _saveBook() {
+    // console.log('before await');
+    this._bookInLine();
+    // console.log('after await');
+    setTimeout(() => {
+    // console.log(this._tempBookshelf, 'Temp Bookshelf');
+      $.ajax({
+        url: this.libraryURL,
+        method: 'POST',
+        dataType: 'json',
+        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
+        data: { bookshelf: this._tempBookshelf },
+        success: () => {
+          window.gDataTable._getAllBooks();
 
-    // setTimeout(() => {
-    $.ajax({
-      url: this.libraryURL,
-      method: 'POST',
-      dataType: 'json',
-      headers: { 'x-access-token': localStorage.getItem('jwt_token') },
-      data: { bookshelf: this._tempBookshelf },
-      success: () => {
-        window.gDataTable._getAllBooks();
+          $('#success-modal').modal('show');
 
-        $('#success-modal').modal('show');
+          setTimeout(() => {
+            $('#success-modal').removeClass('zoomIn');
+            $('#success-modal').addClass('zoomOut');
+          }, 1000);
+          setTimeout(() => {
+            $('#success-modal').modal('hide');
+            $('#success-modal').removeClass('zoomOut');
+            $('#success-modal').addClass('zoomIn');
+          }, 1500);
 
-        setTimeout(() => {
-          $('#success-modal').removeClass('zoomIn');
-          $('#success-modal').addClass('zoomOut');
-        }, 1000);
-        setTimeout(() => {
-          $('#success-modal').modal('hide');
-          $('#success-modal').removeClass('zoomOut');
-          $('#success-modal').addClass('zoomIn');
-        }, 1500);
-
-        this._tempBookshelf = new Array();
-        $('#add-book-form')[0].reset();
-        $('.booksInLine').empty();
-        $('#addBookModal').modal('hide');
-        // console.log(data, "log 2: back from DB");
-      },
-      error: () => {
-        $('#failure-modal').modal('show');
-        const errorMessage = $('<p>', { class: 'text-danger' });
-        errorMessage.text('Oops! Something went wrong! Please try again!');
-        $('#failure-modal').find('.modal-footer').html(errorMessage);
-        $('.booksInLine').empty();
-        this._tempBookshelf = new Array();
-      },
-    });
-    // }, 100);
+          this._tempBookshelf = new Array();
+          $('#add-book-form')[0].reset();
+          $('.booksInLine').empty();
+          $('#addBookModal').modal('hide');
+          // console.log(data, "log 2: back from DB");
+        },
+        error: () => {
+          $('#failure-modal').modal('show');
+          const errorMessage = $('<p>', { class: 'text-danger' });
+          errorMessage.text('Oops! Something went wrong! Please try again!');
+          $('#failure-modal').find('.modal-footer').html(errorMessage);
+          $('.booksInLine').empty();
+          this._tempBookshelf = new Array();
+        },
+      });
+    }, 100);
   }
+
 }
 
 

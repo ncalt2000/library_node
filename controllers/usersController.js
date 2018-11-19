@@ -1,6 +1,6 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
-var bcryptjs = require('bcrypt-nodejs');
+var bcryptjs = require('bcryptjs');
 var bodyParser = require('body-parser');
 var Users = require('../models/users.js');
 var router = express.Router();
@@ -41,7 +41,6 @@ router.post('/register', function(req, res) {
 
 //LOGIN
 router.post('/login', function(req, res) {
-  // console.log(req.body, 'Body from LOGIN');
   Users.findOne({ email: req.body.email }, function (err, user) {
     // console.log(user, 'USER');
     if (err) return res.status(500).send({auth: false, msg: 'Error on the server.'});

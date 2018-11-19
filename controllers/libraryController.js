@@ -30,7 +30,7 @@ const authenticationMiddleware = (req, res, next) => {
 
 // CREATES A NEW BOOK IN LIBRARY
 router.post('/', authenticationMiddleware, function(req, res) {
-  console.log(req.body, 'req.body-POST');
+  // console.log(req.body, 'req.body-POST');
   // console.log(req.body.bookshelf, 'BOOKSHELF to itirate');
 
   const bookPromises = req.body.bookshelf.map(item => {
@@ -51,12 +51,12 @@ router.post('/', authenticationMiddleware, function(req, res) {
   // get all promises and pass it in Promise.all()
   Promise.all(bookPromises).then((value) => {
     // console.log(value, "VALUE");
-    return res.status(200).send(value);
+    return res.status(200).send({success: true, value});
   })
     .catch(err => {
       /* eslint-disable-next-line no-console */
       console.log(err, 'Error!');
-      res.status(500).send('There was a problem adding book(s) to the database.');
+      res.status(200).send({success: false, message: 'There was a problem adding book(s) to the database.'});
     });
 });
 
@@ -84,17 +84,11 @@ router.delete('/:id', authenticationMiddleware, function(req, res) {
 });
 
 router.put('/:id', authenticationMiddleware, function(req, res) {
-  var update = {
-    updatedAt: new Date(),
-    $setOnInsert: {
-      createdAt: new Date()
-    }
-  };
   // eslint-disable-next-line no-console
   // console.log('put book');
-  console.log(req.body, "REQ.BODY");
+  // console.log(req.body, "REQ.BODY");
   // console.log(req.params.id, "REQ.params");
-  Library.findByIdAndUpdate(req.params.id, req.body, {new: true}, update, (err, response) => {
+  Library.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, response) => {
     // console.log(response, 'RESPONSE');
     if (err) {
       return res.status(500).send(err);
