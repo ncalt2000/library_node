@@ -31,33 +31,10 @@ const authenticationMiddleware = (req, res, next) => {
 // CREATES A NEW BOOK IN LIBRARY
 router.post('/', authenticationMiddleware, function(req, res) {
   // console.log(req.body, 'req.body-POST');
-  // console.log(req.body.bookshelf, 'BOOKSHELF to itirate');
-
-  const bookPromises = req.body.bookshelf.map(item => {
-    // console.log(item, "One book");
-    return Library.create({
-      title: item.title,
-      pages: item.pages || null,
-      author: item.author,
-      pubDate: new Date(item.publishDate) || 'no date',
-      genre: item.genre,
-      rating: item.rating,
-      cover: item.cover,
-      synopsis: item.synopsis,
-      // dateCreated: new Date.now()
-    });
+  Library.insertMany(req.body.bookshelf, function(err, books) {
+    if (err) return res.status(500).send('There was a problem adding books in library.');
+    res.status(200).send({success: true, books});
   });
-  // because we iterate, it creates multiple promises which throws error: Headers already set!
-  // get all promises and pass it in Promise.all()
-  Promise.all(bookPromises).then((value) => {
-    // console.log(value, "VALUE");
-    return res.status(200).send({success: true, value});
-  })
-    .catch(err => {
-      /* eslint-disable-next-line no-console */
-      console.log(err, 'Error!');
-      res.status(200).send({success: false, message: 'There was a problem adding book(s) to the database.'});
-    });
 });
 
 // RETURNS ALL BOOKS IN THE DATABASE

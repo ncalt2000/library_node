@@ -34,6 +34,7 @@ class DeleteBook {
   }
 
   _handleDeleteBook(id) {
+
     $.ajax({
       url: `${this.libraryURL}${id}`,
       method: 'DELETE',

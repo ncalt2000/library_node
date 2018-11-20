@@ -103,7 +103,7 @@ class AddBooksUI {
     this._bookInLine();
     // console.log('after await');
     setTimeout(() => {
-    // console.log(this._tempBookshelf, 'Temp Bookshelf');
+      // console.log(this._tempBookshelf, 'Temp Bookshelf');
       $.ajax({
         url: this.libraryURL,
         method: 'POST',
