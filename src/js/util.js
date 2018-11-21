@@ -1,11 +1,11 @@
 
 // Enable tooltips everywhere:
-$(() => {
-  $('[data-toggle="tooltip"]').tooltip();
-});
+// $(() => {
+//   $('[data-toggle="tooltip"]').tooltip();
+// });
 
 // from 02/01/2000 into "February 2000":
-function parseDate(pubDate) {
+export function parseDate(pubDate) {
   const date = new Date(pubDate);
   let month = date.getMonth();
   const arr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'Sepember', 'October', 'November', 'December'];
@@ -15,7 +15,7 @@ function parseDate(pubDate) {
 }
 
 // from "February 2000" into 02/01/2000:
-function parseFormDate(pubDate) {
+export function parseFormDate(pubDate) {
   // console.log("it's working");
   const date = new Date(pubDate);
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -24,7 +24,7 @@ function parseFormDate(pubDate) {
   return `${year}-${month}-${day}`;
 }
 
-const Book = function (cover, title, author, genre, pages, publishDate, rating, deleteCol, synopsis, edit) {
+export function Book(cover, title, author, genre, pages, publishDate, rating, deleteCol, synopsis, edit) {
   this.cover = cover;
   this.title = title;
   this.author = author;

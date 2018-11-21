@@ -1,4 +1,4 @@
-class Search {
+export default class Search {
 
   _init() {
     this._bindEvents();
@@ -60,8 +60,3 @@ class Search {
     this._bindCustomEvents();
   }
 }
-
-$(() => {
-  window.gSearch = new Search();
-  window.gSearch._init();
-});

@@ -30,7 +30,7 @@ const authenticationMiddleware = (req, res, next) => {
 
 // CREATES A NEW BOOK IN LIBRARY
 router.post('/', authenticationMiddleware, function(req, res) {
-  // console.log(req.body, 'req.body-POST');
+  // console.log(req.body.bookshelf, 'req.body-POST');
   Library.insertMany(req.body.bookshelf, function(err, books) {
     if (err) return res.status(500).send('There was a problem adding books in library.');
     res.status(200).send({success: true, books});

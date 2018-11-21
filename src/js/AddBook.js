@@ -1,4 +1,4 @@
-class AddBooksUI {
+export default class AddBooksUI {
   constructor() {
     this._tempBookshelf = new Array();
     this._encodedImg;
@@ -40,6 +40,7 @@ class AddBooksUI {
     fieldsData.map(item => {
       oData[item.name] = item.value;
     });
+    // console.log(oData, "book data 1");
     return oData;
   }
 
@@ -47,6 +48,7 @@ class AddBooksUI {
     // console.log('book in line');
 
     const bookData = this._getFieldsFromModal();
+    // console.log(bookData, "book Data 2");
     const noBookCover = '../assets/books/noCover.jpg';
 
     if (bookData.title === '') {
@@ -144,9 +146,3 @@ class AddBooksUI {
   }
 
 }
-
-
-$(() => {
-  window.gAddBooksUI = new AddBooksUI();
-  window.gAddBooksUI._init();
-});

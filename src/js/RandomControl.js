@@ -1,4 +1,4 @@
-class RandomBookOrAuthor {
+export default class RandomBookOrAuthor {
   _init() {
     this._bindEvents();
   }
@@ -100,8 +100,3 @@ class RandomBookOrAuthor {
     }
   }
 }
-
-$(() => {
-  window.gRandomBook = new RandomBookOrAuthor();
-  window.gRandomBook._init();
-});

@@ -1,4 +1,4 @@
-class DeleteBook {
+export default class DeleteBook {
   constructor() {
     this.libraryURL = '/library/';
     this.bookId = null;
@@ -63,7 +63,3 @@ class DeleteBook {
   }
 
 }
-
-$(() => {
-  window.gDeleteBook = new DeleteBook();
-});

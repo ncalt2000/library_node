@@ -1,4 +1,4 @@
-class Home {
+export default class Home {
   constructor() {
     this.libraryURL = '/user/';
     this.userName = '';
@@ -47,13 +47,3 @@ class Home {
     localStorage.removeItem('jwt_token');
   }
 }
-
-$(() => {
-  window.gHome = new Home();
-  window.gHome._isLoggedIn();
-  if (window.gHome.isLoggedIn) {
-    window.gHome._getUserFromStorage();
-    window.gHome._switchLogInHeader();
-    window.gHome._bindEvents();
-  }
-});
