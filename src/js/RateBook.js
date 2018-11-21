@@ -1,4 +1,4 @@
-class RateBook {
+export default class RateBook {
   constructor() {
     this.libraryURL = '/library/';
     this.bookId = null;
@@ -24,8 +24,3 @@ class RateBook {
   }
 
 }
-
-
-$(() => {
-  window.gRateBook = new RateBook();
-});

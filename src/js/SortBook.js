@@ -1,4 +1,4 @@
-class SortBook {
+export default class SortBook {
   constructor() {
     this.libraryURL = '/library/';
     this.bookId = null;
@@ -25,8 +25,3 @@ class SortBook {
   }
 
 }
-
-$(() => {
-  window.gSortBook = new SortBook();
-  window.gSortBook._init();
-});

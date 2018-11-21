@@ -1,4 +1,4 @@
-class Auth {
+export default class Auth {
   constructor() {
     this.libraryURL = '/user/';
     this.newUserData;
@@ -147,8 +147,3 @@ class Auth {
     }
   }
 }
-
-$(() => {
-  window.gAuth = new Auth();
-  window.gAuth._bindEvents();
-});

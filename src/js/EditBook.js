@@ -1,4 +1,9 @@
-class EditBook {
+import {
+  parseDate,
+  parseFormDate,
+} from "./util.js";
+
+export default class EditBook {
   constructor() {
     this.libraryURL = '/library/';
     // this.allBooks = [];
@@ -12,7 +17,7 @@ class EditBook {
         this.bookId = $(e.target).data('id');
         const bookToEdit = window.gDataTable.allBooks.filter(item => item._id === this.bookId);
 
-        const parsedDate = window.parseFormDate(bookToEdit[0].pubDate);
+        const parsedDate = parseFormDate(bookToEdit[0].pubDate);
 
         $('#title-edit').val(bookToEdit[0].title);
         $('#author-edit').val(bookToEdit[0].author);
@@ -96,7 +101,3 @@ class EditBook {
   }
 
 }
-
-$(() => {
-  window.gEditBook = new EditBook();
-});

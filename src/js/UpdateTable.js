@@ -1,4 +1,9 @@
-class DataTable {
+import {
+  parseDate,
+  Book,
+} from "./util.js";
+
+export default class DataTable {
   constructor() {
     this.libraryURL = '/library/';
     this.allBooks = [];
@@ -173,7 +178,7 @@ class DataTable {
     $(tr).append($('<td>').append(book.author));
     $(tr).append($('<td>').append(book.genre));
     $(tr).append($('<td>').append(book.pages));
-    $(tr).append($('<td>').append(window.parseDate(book.pubDate)));
+    $(tr).append($('<td>').append(parseDate(book.publishDate)));
     $(tr).append($('<td>').append(ratingList).addClass('rating-stars'));
     $(tr).append($('<td>', { class: 'text-center' }).append(deleteIcon));
     $(tr).append($('<td>', { class: 'text-center' }).append(editIcon));
@@ -182,8 +187,3 @@ class DataTable {
   }
 
 }
-
-$(() => {
-  window.gDataTable = new DataTable();
-  window.gDataTable._init();
-});
