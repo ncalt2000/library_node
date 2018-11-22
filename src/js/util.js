@@ -1,11 +1,7 @@
 
-// Enable tooltips everywhere:
-// $(() => {
-//   $('[data-toggle="tooltip"]').tooltip();
-// });
-
 // from 02/01/2000 into "February 2000":
 export function parseDate(pubDate) {
+  console.log("parseDate function");
   const date = new Date(pubDate);
   let month = date.getMonth();
   const arr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'Sepember', 'October', 'November', 'December'];
@@ -36,3 +32,16 @@ export function Book(cover, title, author, genre, pages, publishDate, rating, de
   this.synopsis = synopsis;
   this.edit = edit;
 };
+
+export function renderSuccessModal(){
+  $('#success-modal').modal('show');
+  setTimeout(() => {
+    $('#success-modal').removeClass('zoomIn');
+    $('#success-modal').addClass('zoomOut');
+  }, 1000);
+  setTimeout(() => {
+    $('#success-modal').modal('hide');
+    $('#success-modal').removeClass('zoomOut');
+    $('#success-modal').addClass('zoomIn');
+  }, 1500);
+}

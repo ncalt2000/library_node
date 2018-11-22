@@ -1,6 +1,7 @@
 import {
   parseDate,
   parseFormDate,
+  renderSuccessModal,
 } from "./util.js";
 
 export default class EditBook {
@@ -54,43 +55,43 @@ export default class EditBook {
       };
     }
 
-    setTimeout(() => {
-      let editedBook = {
-        title: newTitle,
-        author: newAuthor,
-        genre: newGenre,
-        pages: newPages,
-        pubDate: newPubDate,
-        synopsis: newSynopsis,
-      };
-      if(newCover){
-        editedBook['cover'] = newCover;
-      } else {
-        editedBook;
+    let count = 0;
+    for (let i = 0; i < window.gDataTable.allBooks.length; i++) {
+      if (window.gDataTable.allBooks[i].title === newTitle && window.gDataTable.allBooks[i].author === newAuthor) {
+        $('#failure-modal').modal('show');
+        $('#failure-modal').find('.modal-footer').html('This title and author already exist in the Library!');
+        return count++;
       }
+    }
+    if (count === 0) {
+      setTimeout(() => {
+        let editedBook = {
+          title: newTitle,
+          author: newAuthor,
+          genre: newGenre,
+          pages: newPages,
+          pubDate: newPubDate,
+          synopsis: newSynopsis,
+        };
+        if(newCover){
+          editedBook['cover'] = newCover;
+        } else {
+          editedBook;
+        }
 
-      $.ajax({
-        url: `${this.libraryURL}${id}`,
-        method: 'PUT',
-        dataType: 'json',
-        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
-        data: editedBook,
-        success: () => {
-        // console.log(data, 'Edited Book from DB');
-          $('#success-modal').modal('show');
-          setTimeout(() => {
-            $('#success-modal').removeClass('zoomIn');
-            $('#success-modal').addClass('zoomOut');
-          }, 1000);
-          setTimeout(() => {
-            $('#success-modal').modal('hide');
-            $('#success-modal').removeClass('zoomOut');
-            $('#success-modal').addClass('zoomIn');
-          }, 1500);
-          window.gDataTable._getAllBooks();
-        },
-      });
-    }, 100);
+        $.ajax({
+          url: `${this.libraryURL}${id}`,
+          method: 'PUT',
+          dataType: 'json',
+          headers: { 'x-access-token': localStorage.getItem('jwt_token') },
+          data: editedBook,
+          success: () => {
+            renderSuccessModal();
+            window.gDataTable._getAllBooks();
+          },
+        });
+      }, 100);
+    }
 
     $('#save-edit-btn').off();
     $('#edit-book-modal').modal('hide');

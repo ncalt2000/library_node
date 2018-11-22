@@ -1,3 +1,5 @@
+import { renderSuccessModal } from "./util.js";
+
 export default class AddBooksUI {
   constructor() {
     this._tempBookshelf = new Array();
@@ -114,18 +116,7 @@ export default class AddBooksUI {
         data: { bookshelf: this._tempBookshelf },
         success: () => {
           window.gDataTable._getAllBooks();
-
-          $('#success-modal').modal('show');
-
-          setTimeout(() => {
-            $('#success-modal').removeClass('zoomIn');
-            $('#success-modal').addClass('zoomOut');
-          }, 1000);
-          setTimeout(() => {
-            $('#success-modal').modal('hide');
-            $('#success-modal').removeClass('zoomOut');
-            $('#success-modal').addClass('zoomIn');
-          }, 1500);
+          renderSuccessModal();
 
           this._tempBookshelf = new Array();
           $('#add-book-form')[0].reset();
