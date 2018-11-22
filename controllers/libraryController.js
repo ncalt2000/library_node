@@ -10,26 +10,60 @@ router.use(bodyParser({limit: '50mb'}));
 router.use(bodyParser.urlencoded({extended: true}));
 
 // Middleware to verify the token
-const authenticationMiddleware = (req, res, next) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+// const authenticationMiddleware = (req, res, next) => {
+//   var token = req.headers['x-access-token'];
+//   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+//
+//   jwt.verify(token, authSecret, function(err, decoded) {
+//     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+//
+//     Users.findById(decoded.id,
+//       { password: 0 }, // projection
+//       function (err, user) {
+//         if (err) return res.status(500).send('There was a problem finding the user.');
+//         if (!user) return res.status(404).send('No user found.');
+//
+//         next();
+//       });
+//   });
+// };
 
-  jwt.verify(token, authSecret, function(err, decoded) {
-    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-
-    Users.findById(decoded.id,
-      { password: 0 }, // projection
-      function (err, user) {
-        if (err) return res.status(500).send('There was a problem finding the user.');
-        if (!user) return res.status(404).send('No user found.');
-
-        next();
-      });
-  });
+function verifyJWT_MW(req, res, next)
+{
+  // (req.method === 'POST'); we could check method
+  let token = req.headers['x-access-token'];
+  console.log(token);
+  verifyJWTToken(token)
+    .then((decodedToken) =>
+    {
+      req.user = decodedToken.data;
+      console.log(req.user);
+      next();
+    })
+    .catch((err) =>
+    {
+      res.status(400)
+        .json({auth: false, token: null, message: "Invalid auth token provided."});
+    });
 };
 
+function verifyJWTToken(token)
+{
+  return new Promise((resolve, reject) =>
+  {
+    jwt.verify(token, authSecret, (err, decodedToken) =>
+    {
+      if (err || !decodedToken)
+      {
+        return reject(err);
+      }
+      resolve(decodedToken);
+    });
+  });
+}
+
 // CREATES A NEW BOOK IN LIBRARY
-router.post('/', authenticationMiddleware, function(req, res) {
+router.post('/', verifyJWT_MW, function(req, res) {
   // console.log(req.body.bookshelf, 'req.body-POST');
   Library.insertMany(req.body.bookshelf, function(err, books) {
     if (err) return res.status(500).send('There was a problem adding books in library.');
@@ -48,7 +82,7 @@ router.get('/', function(req, res) {
   });
 });
 
-router.delete('/:id', authenticationMiddleware, function(req, res) {
+router.delete('/:id', verifyJWT_MW, function(req, res) {
   // console.log(req.params.id, 'params');
   Library.findByIdAndRemove(req.params.id, (err, response) => {
     // console.log(res.body, 'res');
@@ -60,7 +94,7 @@ router.delete('/:id', authenticationMiddleware, function(req, res) {
   });
 });
 
-router.put('/:id', authenticationMiddleware, function(req, res) {
+router.put('/:id', verifyJWT_MW, function(req, res) {
   // eslint-disable-next-line no-console
   // console.log('put book');
   // console.log(req.body, "REQ.BODY");
