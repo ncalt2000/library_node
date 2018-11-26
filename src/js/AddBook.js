@@ -112,7 +112,7 @@ export default class AddBooksUI {
         url: this.libraryURL,
         method: 'POST',
         dataType: 'json',
-        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
+        headers: { 'x-access-token': sessionStorage.getItem('jwt_token') },
         data: { bookshelf: this._tempBookshelf },
         success: () => {
           window.gDataTable._getAllBooks();

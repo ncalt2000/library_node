@@ -10,11 +10,11 @@ export default class Home {
   }
 
   _getToken() {
-    return localStorage.getItem('jwt_token') || false;
+    return sessionStorage.getItem('jwt_token') || false;
   }
 
   _getUserFromStorage() {
-    this.userName = localStorage.getItem('userName') || false;
+    this.userName = sessionStorage.getItem('userName') || false;
   }
 
   _isLoggedIn() {
@@ -44,6 +44,6 @@ export default class Home {
   }
 
   _dumpToken() {
-    localStorage.removeItem('jwt_token');
+    sessionStorage.removeItem('jwt_token');
   }
 }

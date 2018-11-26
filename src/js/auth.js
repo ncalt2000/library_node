@@ -142,8 +142,8 @@ export default class Auth {
 
   _setToken(jwt) {
     if (jwt.auth) {
-      localStorage.setItem('jwt_token', jwt.token);
-      localStorage.setItem('userName', jwt.user);
+      sessionStorage.setItem('jwt_token', jwt.token);
+      sessionStorage.setItem('userName', jwt.user);
     }
   }
 }

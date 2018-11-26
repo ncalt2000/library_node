@@ -42,7 +42,7 @@ export default class DeleteBook {
       method: 'DELETE',
       dataType: 'json',
       headers: {
-        'x-access-token': localStorage.getItem('jwt_token')
+        'x-access-token': sessionStorage.getItem('jwt_token')
       },
       data: id,
       success: (data) => {

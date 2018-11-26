@@ -43,12 +43,13 @@ router.post('/register', function(req, res) {
     // console.log(user, 'USER EXIST');
     if (err) return res.status(500).send('Error on the server.');
     if (user) return res.status(200).send({ auth: false, msg: 'This email already registered!' });
+
     if(!user){
       Users.create({
         firstName : req.body.firstName,
         lastName : req.body.lastName,
         email : req.body.email,
-        password : hashedPassword
+        password : hashedPassword,
       },
       function (err, user) {
         // console.log(user, "USER");

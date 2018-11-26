@@ -74,7 +74,7 @@ export default class EditBook {
         url: `${this.libraryURL}${id}`,
         method: 'PUT',
         dataType: 'json',
-        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
+        headers: { 'x-access-token': sessionStorage.getItem('jwt_token') },
         data: editedBook,
         success: () => {
           renderSuccessModal();

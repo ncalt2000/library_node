@@ -10,7 +10,7 @@ export default class RateBook {
         url: `${this.libraryURL}${this.bookId}`,
         method: 'PUT',
         dataType: 'json',
-        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
+        headers: { 'x-access-token': sessionStorage.getItem('jwt_token') },
         data: { rating: onStar },
         success: (data) => {
           if (data) {

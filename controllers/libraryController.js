@@ -9,29 +9,10 @@ var router = express.Router();
 router.use(bodyParser({limit: '50mb'}));
 router.use(bodyParser.urlencoded({extended: true}));
 
-// Middleware to verify the token
-// const authenticationMiddleware = (req, res, next) => {
-//   var token = req.headers['x-access-token'];
-//   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-//
-//   jwt.verify(token, authSecret, function(err, decoded) {
-//     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-//
-//     Users.findById(decoded.id,
-//       { password: 0 }, // projection
-//       function (err, user) {
-//         if (err) return res.status(500).send('There was a problem finding the user.');
-//         if (!user) return res.status(404).send('No user found.');
-//
-//         next();
-//       });
-//   });
-// };
 
 function verifyJWT_MW(req, res, next){
   // (req.method === 'POST'); we could check method
   let token = req.headers['x-access-token'];
-  // console.log(token);
   verifyJWTToken(token)
     .then((decodedToken) => {
       req.user = decodedToken.data;
@@ -64,36 +45,24 @@ router.post('/', verifyJWT_MW, function(req, res) {
   });
 });
 
-// RETURNS ALL BOOKS IN THE DATABASE
 router.get('/', function(req, res) {
-  // console.log('get all books route');
   Library.find({}, function(err, books) {
     if (err) return res.status(500).send('There was a problem finding books in library.');
-    // eslint-disable-next-line
-    // console.log('get all books success');
     res.status(200).send(books);
   });
 });
 
 router.delete('/:id', verifyJWT_MW, function(req, res) {
-  // console.log(req.params.id, 'params');
   Library.findByIdAndRemove(req.params.id, (err, response) => {
-    // console.log(res.body, 'res');
-    // console.log(err, 'error');
     if (err) {
-      return res.status(500).send(err);
+      return res.status(400).send(err);
     }
     res.status(200).send(response);
   });
 });
 
 router.put('/:id', verifyJWT_MW, function(req, res) {
-  // eslint-disable-next-line no-console
-  // console.log('put book');
-  // console.log(req.body, "REQ.BODY");
-  // console.log(req.params.id, "REQ.params");
   Library.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, response) => {
-    // console.log(response, 'RESPONSE');
     if (err) {
       return res.status(500).send(err);
     }
