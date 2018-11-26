@@ -1,7 +1,7 @@
 
 // from 02/01/2000 into "February 2000":
 export function parseDate(pubDate) {
-  console.log("parseDate function");
+  // console.log("parseDate function");
   const date = new Date(pubDate);
   let month = date.getMonth();
   const arr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'Sepember', 'October', 'November', 'December'];

@@ -55,43 +55,33 @@ export default class EditBook {
       };
     }
 
-    let count = 0;
-    for (let i = 0; i < window.gDataTable.allBooks.length; i++) {
-      if (window.gDataTable.allBooks[i].title === newTitle && window.gDataTable.allBooks[i].author === newAuthor) {
-        $('#failure-modal').modal('show');
-        $('#failure-modal').find('.modal-footer').html('This title and author already exist in the Library!');
-        return count++;
+    setTimeout(() => {
+      let editedBook = {
+        title: newTitle,
+        author: newAuthor,
+        genre: newGenre,
+        pages: newPages,
+        pubDate: newPubDate,
+        synopsis: newSynopsis,
+      };
+      if(newCover){
+        editedBook['cover'] = newCover;
+      } else {
+        editedBook;
       }
-    }
-    if (count === 0) {
-      setTimeout(() => {
-        let editedBook = {
-          title: newTitle,
-          author: newAuthor,
-          genre: newGenre,
-          pages: newPages,
-          pubDate: newPubDate,
-          synopsis: newSynopsis,
-        };
-        if(newCover){
-          editedBook['cover'] = newCover;
-        } else {
-          editedBook;
-        }
 
-        $.ajax({
-          url: `${this.libraryURL}${id}`,
-          method: 'PUT',
-          dataType: 'json',
-          headers: { 'x-access-token': localStorage.getItem('jwt_token') },
-          data: editedBook,
-          success: () => {
-            renderSuccessModal();
-            window.gDataTable._getAllBooks();
-          },
-        });
-      }, 100);
-    }
+      $.ajax({
+        url: `${this.libraryURL}${id}`,
+        method: 'PUT',
+        dataType: 'json',
+        headers: { 'x-access-token': localStorage.getItem('jwt_token') },
+        data: editedBook,
+        success: () => {
+          renderSuccessModal();
+          window.gDataTable._getAllBooks();
+        },
+      });
+    }, 100);
 
     $('#save-edit-btn').off();
     $('#edit-book-modal').modal('hide');

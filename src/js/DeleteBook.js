@@ -1,3 +1,5 @@
+import { renderSuccessModal } from "./util.js";
+
 export default class DeleteBook {
   constructor() {
     this.libraryURL = '/library/';
@@ -45,16 +47,7 @@ export default class DeleteBook {
       data: id,
       success: (data) => {
         if (data) {
-          $('#success-modal').modal('show');
-          setTimeout(() => {
-            $('#success-modal').removeClass('zoomIn');
-            $('#success-modal').addClass('zoomOut');
-          }, 1000);
-          setTimeout(() => {
-            $('#success-modal').modal('hide');
-            $('#success-modal').removeClass('zoomOut');
-            $('#success-modal').addClass('zoomIn');
-          }, 1500);
+          renderSuccessModal();
           $('.confirm-delete-text').empty();
         }
         window.gDataTable._getAllBooks();

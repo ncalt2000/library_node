@@ -28,33 +28,26 @@ router.use(bodyParser.urlencoded({extended: true}));
 //   });
 // };
 
-function verifyJWT_MW(req, res, next)
-{
+function verifyJWT_MW(req, res, next){
   // (req.method === 'POST'); we could check method
   let token = req.headers['x-access-token'];
-  console.log(token);
+  // console.log(token);
   verifyJWTToken(token)
-    .then((decodedToken) =>
-    {
+    .then((decodedToken) => {
       req.user = decodedToken.data;
-      console.log(req.user);
+      // console.log(req.user);
       next();
     })
-    .catch((err) =>
-    {
+    .catch((err) => {
       res.status(400)
         .json({auth: false, token: null, message: "Invalid auth token provided."});
     });
 };
 
-function verifyJWTToken(token)
-{
-  return new Promise((resolve, reject) =>
-  {
-    jwt.verify(token, authSecret, (err, decodedToken) =>
-    {
-      if (err || !decodedToken)
-      {
+function verifyJWTToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, authSecret, (err, decodedToken) => {
+      if (err || !decodedToken) {
         return reject(err);
       }
       resolve(decodedToken);

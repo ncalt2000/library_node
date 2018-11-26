@@ -23,5 +23,4 @@ export default class SortBook {
   _init() {
     window.gDataTable._bindEvents();
   }
-
 }
