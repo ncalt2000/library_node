@@ -1,6 +1,6 @@
-// Library.js
-var mongoose = require('mongoose');
-var LibrarySchema = new mongoose.Schema({
+import mongoose from 'mongoose';
+
+const LibrarySchema = new mongoose.Schema({
   cover: String, //Base64 Encoded
   title: String,
   author: String,
@@ -9,6 +9,7 @@ var LibrarySchema = new mongoose.Schema({
   publishDate: Date,
   rating: Number,
   synopsis: String,
+  userID:  {type: mongoose.Schema.Types.ObjectId, ref: 'Users'}
 });
 mongoose.model('Library', LibrarySchema);
 

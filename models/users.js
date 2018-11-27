@@ -1,11 +1,10 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-var UsersSchema = new mongoose.Schema({
+const UsersSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
   password: String,
-  userID:  {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 
 mongoose.model('Users', UsersSchema);
